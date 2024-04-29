@@ -1,4 +1,5 @@
 from django.db import models
+import bcrypt
 
 from base.models import BaseModel, State, Role
 
@@ -15,6 +16,17 @@ class EUser(BaseModel):
 
     class Meta:
         abstract = True
+
+    def set_password(self, password):
+        # hash the password
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+        self.password = hashed_password
+        self.save()
+
+    def check_password(self, password):
+        if bcrypt.checkpw(password, self.password):
+            return True
+        return False
 
 
 class AbstractEUser(EUser):
