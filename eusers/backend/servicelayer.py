@@ -1,5 +1,5 @@
 from eusers.models import Guardian, Student, Teacher, Admin
-from utils.servicebase import ServiceBase
+from utils.ServiceBase import ServiceBase
 
 
 class GuardianService(ServiceBase):
