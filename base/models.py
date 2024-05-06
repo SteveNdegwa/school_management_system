@@ -38,6 +38,15 @@ class State(GenericBaseModel):
             pass
         return None
 
+    @classmethod
+    def disabled_state(cls):
+        try:
+            state = cls.objects.get(state="Disabled")
+            return state
+        except Exception:
+            pass
+        return None
+
 
 class Role(GenericBaseModel):
     state = models.ForeignKey(State, default=State.default_state, on_delete=models.CASCADE)
@@ -45,6 +54,23 @@ class Role(GenericBaseModel):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def default_admin(cls):
+        try:
+            state = cls.objects.get(state="Admin")
+            return state
+        except Exception:
+            pass
+        return None
+
+    @classmethod
+    def default_teacher(cls):
+        try:
+            state = cls.objects.get(state="Teacher")
+            return state
+        except Exception:
+            pass
+        return None
 
 class Permission(GenericBaseModel):
     state = models.ForeignKey(State, default=State.default_state, on_delete=models.CASCADE)
@@ -71,12 +97,11 @@ class Transaction(BaseModel):
     euser = models.ForeignKey(EUser, null=True, blank=True, on_delete=models.CASCADE)
     transaction_type = models.ForeignKey(TransactionType, on_delete=models.CASCADE)
     source_ip = models.CharField(max_length=100, null=True, blank=True)
-    request = models.TextField(null=True, blank=True)
+    request_data = models.TextField(null=True, blank=True)
     response = models.TextField(null=True, blank=True)
-    response_code = models.CharField(max_length=20, null=True, blank=True)
     notification_response = models.TextField(null=True, blank=True)
-    record = models.CharField(max_length=400, null=True, blank=True)
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    successful = models.BooleanField(default=False)
+    state = models.ForeignKey(State, default=State.default_state, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s - %s' % (self.euser, self.transaction_type)

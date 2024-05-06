@@ -1,18 +1,22 @@
-from eusers.models import Guardian, Student, Teacher, Admin
+from eusers.models import Guardian, Student, EUser, StudentPassword, EUserPassword
 from utils.ServiceBase import ServiceBase
 
 
-class GuardianService(ServiceBase):
-    manager = Guardian.objects
+class EUserService(ServiceBase):
+    manager = EUser.objects
+
+
+class EUserPasswordService(ServiceBase):
+    manager = EUserPassword.objects
 
 
 class StudentService(ServiceBase):
     manager = Student.objects
 
 
-class TeacherService(ServiceBase):
-    manager = Teacher.objects
+class StudentPasswordService(ServiceBase):
+    manager = StudentPassword.objects
 
 
-class AdminService(ServiceBase):
-    manager = Admin.objects
+class GuardianService(ServiceBase):
+    manager = Guardian.objects
