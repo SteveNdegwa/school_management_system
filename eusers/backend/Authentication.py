@@ -113,15 +113,17 @@ class Authentication(TransactionLogBase):
             user = EUserService().create(**k)
             if not user:
                 lgr.exception('Error creating user: %s', data.get('first_name'))
-                response = {"code": "300.000.001", "message": "Error creating user"}
+                response = {"code": "300.000.010", "message": "Error creating user"}
                 self.mark_transaction_failed(transaction, response)
                 return JsonResponse(response)
             password = generate_password()
             user.set_password(password)
+            lgr.info("User: %s created successfully", "%s %s &s", (first_name, last_name))
             response = {"code": "100.000.000", "message": "User created successfully"}
             self.complete_transaction(transaction, response)
             return JsonResponse(response)
 
         except Exception as e:
-            self.mark_transaction_failed(transaction)
+            response = {"code": "300.000.010", "message": "Error occurred when registering user"}
+            self.mark_transaction_failed(transaction, response)
             lgr.exception('Register user Exception: %s', e)

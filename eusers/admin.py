@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Guardian, Student, Teacher, Admin
+from .models import Guardian, Student, EUser
 
 
 # Register your models here.
@@ -15,17 +15,11 @@ class StudentAdmin(admin.ModelAdmin):
                     'state', 'date_created', 'date_modified')
 
 
-class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'other_name', 'dob', 'id_no', 'tsc_no', 'phone_number',
+class EUserAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'other_name', 'dob', 'id_no', 'phone_number',
                     'other_phone_number', 'email', 'role', 'state', 'date_created', 'date_modified')
-
-
-class AdministratorAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'other_name', 'dob', 'id_no', 'phone_number', 'other_phone_number',
-                    'email', 'role', 'state', 'date_created', 'date_modified')
 
 
 admin.site.register(Guardian, GuardianAdmin)
 admin.site.register(Student, StudentAdmin)
-admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(Admin, AdministratorAdmin)
+admin.site.register(EUser, EUserAdmin)

@@ -22,7 +22,7 @@ class RolePermissionAdmin(admin.ModelAdmin):
     list_display = ('role', 'permission', 'state', 'date_created', 'date_modified')
 
 
-admin.register(State, StateAdmin)
-admin.register(Role, RoleAdmin)
-admin.register(Permission, PermissionAdmin)
-admin.register(RolePermission, RolePermissionAdmin)
+admin.site.register(State, StateAdmin)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(Permission, PermissionAdmin)
+admin.site.register(RolePermission, RolePermissionAdmin)

@@ -3,7 +3,6 @@ from django.db.models import Q
 import bcrypt
 
 from base.models import BaseModel, State, Role
-from eusers.backend.servicelayer import EUserPasswordService, StudentPasswordService
 
 
 # Create your models here.
@@ -48,9 +47,9 @@ class EUser(AbstractUser):
     def set_password(self, password):
         try:
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-            password_inst = EUserPasswordService().create(euser=self, password=hashed_password)
+            password_inst = EUserPassword.objects.create(euser=self, password=hashed_password)
             if password_inst:
-                EUserPasswordService().filter(~Q(id=password_inst.id), euser=self, state__name='Active').update(
+                EUserPassword.objects.filter(~Q(id=password_inst.id), euser=self, state__name='Active').update(
                     state=State.disabled_state())
                 return True
         except Exception:
@@ -59,7 +58,7 @@ class EUser(AbstractUser):
 
     def check_password(self, password):
         try:
-            password_inst = EUserPasswordService().get(euser=self, state__name="Active")
+            password_inst = EUserPassword.objects.get(euser=self, state__name="Active")
             if bcrypt.checkpw(password, password_inst.password):
                 return True
         except Exception:
@@ -85,9 +84,9 @@ class Student(BaseUser):
     def set_password(self, password):
         try:
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-            password_inst = StudentPasswordService().create(euser=self, password=hashed_password)
+            password_inst = StudentPassword.objects.create(euser=self, password=hashed_password)
             if password_inst:
-                StudentPasswordService().filter(~Q(id=password_inst.id), euser=self, state__name='Active').update(
+                StudentPassword.objects.filter(~Q(id=password_inst.id), euser=self, state__name='Active').update(
                     state=State.disabled_state())
                 return True
         except Exception:
@@ -96,7 +95,7 @@ class Student(BaseUser):
 
     def check_password(self, password):
         try:
-            password_inst = StudentPasswordService().get(euser=self, state__name="Active")
+            password_inst = StudentPassword.objects.get(euser=self, state__name="Active")
             if bcrypt.checkpw(password, password_inst.password):
                 return True
         except Exception:
